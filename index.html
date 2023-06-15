@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <?!= HtmlService.createHtmlOutputFromFile('css').getContent(); ?>
+</head>
+
+<body>
+
+  <script>
+    var localId = -1;
+    var localButtonID = [];
+
+    getQuizData();
+
+    function getQuizData() {
+      loadingAnimation(1);
+      google.script.run.withSuccessHandler(updateQuizNumber).withFailureHandler(communicationError).getRnd();
+    }
+
+    function updateQuizNumber(id) {
+      localId = id;
+      // document.getElementById('QuizNumber').innerHTML = '問題' + id;
+
+      // 問題文取得
+      google.script.run.withSuccessHandler(updateQuizDescription).withFailureHandler(communicationError).getQuizDescription(localId);
+
+      // 回答選択肢取得
+      google.script.run.withSuccessHandler(updateOptions).withFailureHandler(communicationError).getQuizOptions(localId);
+    }
+
+    function updateQuizDescription(data) {
+      document.getElementById('QuizNumber').innerHTML = '問題' + data[0];
+      document.getElementById('QuizDescription').innerHTML = data[1];
+    }
+
+    function updateOptions(optionsList) {
+
+      localButtonID = [];
+      for (let i = 0; i < 4; i++) {
+        document.getElementById('B' + i).textContent = optionsList[i][0];
+        localButtonID.push(optionsList[i][1]);
+      }
+
+      console.log(localButtonID);
+      loadingAnimation(0);
+    }
+
+    function doAnswer(id) {
+      if (localButtonID[id] === localId) {
+        getQuizData();
+        alert('正解です！');
+        alert('次の問題に移ります');
+      }
+      else {
+        alert('不正解です');
+      }
+    }
+
+    function communicationError(val) {
+      console.log("Communication Error.");
+      console.log("Data Type: " + typeof (val));
+    }
+
+    function loadingAnimation(flag) {
+      const loading = document.getElementById("loading");
+
+      if (loading !== null) {
+        if (flag === 1) {
+          // visibleで表示
+          loading.style.visibility = "visible";
+        } else {
+          // hiddenで非表示
+          loading.style.visibility = "hidden";
+        }
+      }
+    }
+
+  </script>
+
+  <div style="text-align: center;">
+    <h1>4 Quiz GAS</h1>
+
+    <br>
+    <button class="btn btn-switch" onclick="getQuizData(); loadingAnimation(1);"><span>出題する</span></button>
+    <br>
+
+    <h2>
+      <p id="QuizNumber">問題X</p>
+    </h2>
+
+    <h3>
+      <p id="QuizDescription">問題文</p>
+    </h3>
+
+    <br>
+
+    <div class="buttonGroup">
+      <button id="B0" class="btn btn-switch" onclick="doAnswer(0)"><span></span></button>
+      <button id="B1" class="btn btn-switch" onclick="doAnswer(1)"><span></span></button>
+      <button id="B2" class="btn btn-switch" onclick="doAnswer(2)"><span></span></button>
+      <button id="B3" class="btn btn-switch" onclick="doAnswer(3)"><span></span></button>
+    </div>
+
+    <div id="loading" style="text-align: center; visibility: visible;">
+      <!-- GRADIENT SPINNER -->
+      <h3>読込中</h3>
+      <div class="spinner-box">
+        <div class="circle-border">
+          <div class="circle-core"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

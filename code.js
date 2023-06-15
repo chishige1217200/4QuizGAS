@@ -1,5 +1,4 @@
 // テンプレコード
-
 /**
  * ウェブアプリのURLにアクセスした際，index.htmlを返します．
  * @returns {HtmlTemplate} index.htmlの内容

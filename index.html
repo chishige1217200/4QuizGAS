@@ -10,7 +10,7 @@
 
   <script>
     var localId = -1;
-    var localButtonID = [];
+    var localButtonId = [];
 
     getQuizData();
 
@@ -37,18 +37,18 @@
 
     function updateOptions(optionsList) {
 
-      localButtonID = [];
+      localButtonId = [];
       for (let i = 0; i < 4; i++) {
         document.getElementById('B' + i).textContent = optionsList[i][0];
-        localButtonID.push(optionsList[i][1]);
+        localButtonId.push(optionsList[i][1]);
       }
 
-      console.log(localButtonID);
+      console.log(localButtonId);
       loadingAnimation(0);
     }
 
     function doAnswer(id) {
-      if (localButtonID[id] === localId) {
+      if (localButtonId[id] === localId) {
         getQuizData();
         alert('正解です！\n次の問題に移ります．');
       }
@@ -75,7 +75,6 @@
         }
       }
     }
-
   </script>
 
   <div style="text-align: center;">

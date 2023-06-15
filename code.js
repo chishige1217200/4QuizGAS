@@ -56,7 +56,9 @@ function getQuizOptions(id) {
     let tmpNum = getRnd();
     let newOption = [sheet.getRange(tmpNum, 1).getValue(), tmpNum];
 
-    if (!optionsList.includes(newOption)) {
+    let some = optionsList.some(o => o[0] === newOption[0] && o[1] === newOption[1]);
+
+    if (!some) {
       optionsList.push(newOption);
       count++;
     }

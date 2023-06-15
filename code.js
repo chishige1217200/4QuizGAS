@@ -1,10 +1,19 @@
 // テンプレコード
 
+/**
+ * ウェブアプリのURLにアクセスした際，index.htmlを返します．
+ * @returns {HtmlTemplate} index.htmlの内容
+ */
 function doGet() {
   const fileName = "index";
   return HtmlService.createTemplateFromFile(fileName).evaluate();
 }
 
+/**
+ * コードエディタ内のHTMLファイルからHTMLの部分要素を返します．
+ * @param {string} filename コードエディタ内のHTMLファイル名（拡張子不要）
+ * @returns {HtmlOutput} 指定されたHTMLファイルの部分要素
+ */
 function include(filename) {
   return HtmlService.createHtmlOutputFromFile(filename).getContent();
 }
@@ -35,7 +44,7 @@ function getMaxRowCount() {
 }
 
 /**
- * 
+ *
  * @param {int} id 出題する問題ID
  * @returns {[id, string]} 出題する問題のIDと問題文
  */
@@ -61,7 +70,9 @@ function getQuizOptions(id) {
     let newOption = [sheet.getRange(tmpNum, 1).getValue(), tmpNum];
 
     // 比較条件が複数あるため，includesメソッドではなくsomeメソッドを用いる必要がある
-    let some = optionsList.some(o => o[0] === newOption[0] && o[1] === newOption[1]);
+    let some = optionsList.some(
+      (o) => o[0] === newOption[0] && o[1] === newOption[1]
+    );
 
     // リストに含まれていない値であればリストに追加する
     if (!some) {
